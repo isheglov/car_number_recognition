@@ -52,7 +52,6 @@ curl -X POST https://your-api-id.execute-api.region.amazonaws.com/prod/process \
 ### Response
 ```json
 {
-  "text": "Extracted text from Amazon Textract...",
-  "confidence": 95.4
+  "text": "Browser text"
 }
 ```
