@@ -1,14 +1,14 @@
 # Car Number Recognition
 
-## A serverless application for recognizing car numbers (license plates) using AWS Lambda and Amazon Textract.
+A serverless application for recognizing car numbers (license plates) using AWS Lambda and Amazon Textract.
 
-Table of Contents
-	•	Overview
-	•	Architecture
-	•	Setup & Deployment
-	•	Usage
-	•	Technologies Used
-	•	License
+## Table of Contents
+- Overview
+- Architecture
+- Setup & Deployment
+- Usage
+- Technologies Used
+- License
 
 ## Overview
 
