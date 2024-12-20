@@ -29,10 +29,10 @@ graph TD
     C --> F
 ```
 
-	•	Client: Sends a POST request with a Base64-encoded image.
-	•	API Gateway: Serves as the HTTP endpoint to receive requests.
-	•	Lambda1: Validates the input and invokes Lambda2.
-	•	Lambda2: Processes the image using Amazon Textract to extract text.
-	•	Amazon Textract: Performs OCR to detect and analyze text in the image.
-	•	CloudWatch Logs: Logs for monitoring and debugging.
+- Client: Sends a POST request with a Base64-encoded image.
+- API Gateway: Serves as the HTTP endpoint to receive requests.
+- Lambda1: Validates the input and invokes Lambda2.
+- Lambda2: Processes the image using Amazon Textract to extract text.
+- Amazon Textract: Performs OCR to detect and analyze text in the image.
+- CloudWatch Logs: Logs for monitoring and debugging.
 
