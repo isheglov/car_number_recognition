@@ -79,13 +79,7 @@ def lambda_handler(event, context):
                 }),
             }
 
-        return {
-            'statusCode': 200,
-            'body': json.dumps({
-                'text': textract_text,
-                'confidence': textract_avg_confidence
-            }),
-        }
+        return {'text': textract_text}
 
     except Exception as e:
         logger.exception("An unexpected error occurred: %s", str(e))

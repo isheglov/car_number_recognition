@@ -69,10 +69,7 @@ def lambda_handler(event, context):
         
         return {
             'statusCode': 200,
-            'body': json.dumps({
-                'message': 'Lambda2 invoked successfully',
-                'response': response_payload
-            }),
+            'body': json.dumps(response_payload),
         }
         
     except Exception as e:
