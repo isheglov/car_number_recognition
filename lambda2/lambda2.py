@@ -7,8 +7,9 @@ import logging
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-# Initialize AWS Textract client
+# Initialize AWS clients
 textract = boto3.client('textract')
+rekognition = boto3.client('rekognition')
 
 def lambda_handler(event, context):
     logger.info("Received event: %s", json.dumps(event))
@@ -64,7 +65,7 @@ def lambda_handler(event, context):
             # Calculate average confidence
             if textract_confidences:
                 textract_avg_confidence = sum(textract_confidences) / len(textract_confidences)
-                logger.info("Calculated average confidence: %s", textract_avg_confidence)
+                logger.info("Calculated average confidence for Textract: %s", textract_avg_confidence)
             else:
                 textract_avg_confidence = 0
                 logger.warning("No confidence scores found in Textract response.")
@@ -79,7 +80,46 @@ def lambda_handler(event, context):
                 }),
             }
 
-        return {'text': textract_text}
+        # Perform OCR using Amazon Rekognition
+        rekognition_text = ""
+        rekognition_confidences = []
+        try:
+            rekognition_response = rekognition.detect_text(
+                Image={'Bytes': image_bytes}
+            )
+            logger.info("Rekognition response received.")
+            
+            for text_detect in rekognition_response.get('TextDetections', []):
+                if text_detect['Type'] == 'LINE':
+                    rekognition_text += text_detect['DetectedText'] + '\n'
+                    rekognition_confidences.append(text_detect.get('Confidence', 0))
+            rekognition_text = rekognition_text.strip()
+            logger.info("Extracted text from Rekognition.")
+
+            # Calculate average confidence
+            if rekognition_confidences:
+                rekognition_avg_confidence = sum(rekognition_confidences) / len(rekognition_confidences)
+                logger.info("Calculated average confidence for Rekognition: %s", rekognition_avg_confidence)
+            else:
+                rekognition_avg_confidence = 0
+                logger.warning("No confidence scores found in Rekognition response.")
+
+        except Exception as rekognition_error:
+            logger.error("Rekognition processing failed: %s", str(rekognition_error))
+            return {
+                'statusCode': 500,
+                'body': json.dumps({
+                    'message': 'OCR processing failed with Rekognition.',
+                    'error': str(rekognition_error)
+                }),
+            }
+
+        # Compare confidences and determine which OCR tool performed better
+        result_text = rekognition_text
+        if textract_avg_confidence > rekognition_avg_confidence:
+            result_text = textract_text
+        
+        return {'text': result_text}
 
     except Exception as e:
         logger.exception("An unexpected error occurred: %s", str(e))

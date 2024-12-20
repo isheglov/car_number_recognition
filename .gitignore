@@ -6,3 +6,5 @@ terraform.tfstate.backup
 
 .terraform.tfstate.lock.info
 
+lambda1.zip
+lambda2.zip

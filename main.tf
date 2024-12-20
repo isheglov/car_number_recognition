@@ -71,6 +71,31 @@ resource "aws_iam_role_policy_attachment" "lambda_textract_attach" {
   policy_arn = aws_iam_policy.lambda_textract_policy.arn
 }
 
+resource "aws_iam_policy" "lambda_rekognition_policy" {
+  name        = "lambda_rekognition_policy"
+  description = "Allows Lambda2 to use Amazon Rekognition"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "rekognition:DetectText"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+# Attach Rekognition Policy to the Lambda Execution Role
+resource "aws_iam_role_policy_attachment" "lambda_rekognition_attach" {
+  role       = aws_iam_role.lambda_exec_role.name
+  policy_arn = aws_iam_policy.lambda_rekognition_policy.arn
+}
+
+
 ######################
 # Lambda Function 2
 ######################
