@@ -52,6 +52,6 @@ curl -X POST https://your-api-id.execute-api.region.amazonaws.com/prod/process \
 ### Response
 ```json
 {
-  "text": "Browser text"
+  "text": "Browser support"
 }
 ```
